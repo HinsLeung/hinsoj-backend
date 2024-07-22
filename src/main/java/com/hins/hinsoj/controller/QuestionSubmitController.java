@@ -1,10 +1,15 @@
 package com.hins.hinsoj.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hins.hinsoj.annotation.AuthCheck;
 import com.hins.hinsoj.common.BaseResponse;
 import com.hins.hinsoj.common.ErrorCode;
 import com.hins.hinsoj.common.ResultUtils;
+import com.hins.hinsoj.constant.UserConstant;
 import com.hins.hinsoj.exception.BusinessException;
+import com.hins.hinsoj.model.dto.question.QuestionQueryRequest;
 import com.hins.hinsoj.model.dto.questionsubmit.QuestionSubmitAddRequest;
+import com.hins.hinsoj.model.entity.Question;
 import com.hins.hinsoj.model.entity.User;
 import com.hins.hinsoj.service.QuestionSubmitService;
 import com.hins.hinsoj.service.UserService;
@@ -53,4 +58,18 @@ public class QuestionSubmitController {
         return ResultUtils.success(questionSubmitId);
     }
 
+    /**
+     * 分页获取题目提交列表（除了管理员外，普通用户只能看非答案、提交代码等非公开信息）
+     *
+     * @param questionQueryRequest
+     * @return
+     */
+    @PostMapping("/list/page")
+    public BaseResponse<Page<Question>> listQuestionSubmitByPage(@RequestBody QuestionQueryRequest questionQueryRequest) {
+        long current = questionQueryRequest.getCurrent();
+        long size = questionQueryRequest.getPageSize();
+        Page<Question> questionPage = questionService.page(new Page<>(current, size),
+                questionService.getQueryWrapper(questionQueryRequest));
+        return ResultUtils.success(questionPage);
+    }
 }

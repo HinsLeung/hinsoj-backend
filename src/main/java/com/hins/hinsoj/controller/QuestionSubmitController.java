@@ -1,16 +1,15 @@
 package com.hins.hinsoj.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hins.hinsoj.annotation.AuthCheck;
 import com.hins.hinsoj.common.BaseResponse;
 import com.hins.hinsoj.common.ErrorCode;
 import com.hins.hinsoj.common.ResultUtils;
-import com.hins.hinsoj.constant.UserConstant;
 import com.hins.hinsoj.exception.BusinessException;
-import com.hins.hinsoj.model.dto.question.QuestionQueryRequest;
 import com.hins.hinsoj.model.dto.questionsubmit.QuestionSubmitAddRequest;
-import com.hins.hinsoj.model.entity.Question;
+import com.hins.hinsoj.model.dto.questionsubmit.QuestionSubmitQueryRequest;
+import com.hins.hinsoj.model.entity.QuestionSubmit;
 import com.hins.hinsoj.model.entity.User;
+import com.hins.hinsoj.model.vo.QuestionSubmitVO;
 import com.hins.hinsoj.service.QuestionSubmitService;
 import com.hins.hinsoj.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -52,7 +51,7 @@ public class QuestionSubmitController {
         if (questionSubmitAddRequest == null || questionSubmitAddRequest.getQuestionId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        // 登录才能点赞
+        // 登录
         final User loginUser = userService.getLoginUser(request);
         long questionSubmitId = questionSubmitService.doQuestionSubmit(questionSubmitAddRequest, loginUser);
         return ResultUtils.success(questionSubmitId);
@@ -61,15 +60,18 @@ public class QuestionSubmitController {
     /**
      * 分页获取题目提交列表（除了管理员外，普通用户只能看非答案、提交代码等非公开信息）
      *
-     * @param questionQueryRequest
+     * @param questionSubmitQueryRequest
      * @return
      */
     @PostMapping("/list/page")
-    public BaseResponse<Page<Question>> listQuestionSubmitByPage(@RequestBody QuestionQueryRequest questionQueryRequest) {
-        long current = questionQueryRequest.getCurrent();
-        long size = questionQueryRequest.getPageSize();
-        Page<Question> questionPage = questionService.page(new Page<>(current, size),
-                questionService.getQueryWrapper(questionQueryRequest));
-        return ResultUtils.success(questionPage);
+    public BaseResponse<Page<QuestionSubmitVO>> listQuestionSubmitByPage(@RequestBody QuestionSubmitQueryRequest questionSubmitQueryRequest,
+                                                                         HttpServletRequest request) {
+        long current = questionSubmitQueryRequest.getCurrent();
+        long size = questionSubmitQueryRequest.getPageSize();
+        //从数据库中查询原始的题目提交分页信息
+        Page<QuestionSubmit> questionSubmitPage = questionSubmitService.page(new Page<>(current, size),
+                questionSubmitService.getQueryWrapper(questionSubmitQueryRequest));
+        final User loginUser = userService.getLoginUser(request);
+        return ResultUtils.success(questionSubmitService.getQuestionSubmitVOPage(questionSubmitPage, loginUser));
     }
 }

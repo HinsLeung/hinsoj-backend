@@ -1,6 +1,6 @@
 package com.hins.hinsoj.judge;
 
-import com.hins.hinsoj.model.vo.QuestionSubmitVO;
+import com.hins.hinsoj.model.entity.QuestionSubmit;
 
 /**
  * 判题服务
@@ -12,5 +12,5 @@ public interface JudgeService {
      * @param questionSubmitId
      * @return
      */
-    QuestionSubmitVO doJudge(long questionSubmitId);
+    QuestionSubmit doJudge(long questionSubmitId);
 }

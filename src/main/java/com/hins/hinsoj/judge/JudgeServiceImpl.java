@@ -8,14 +8,12 @@ import com.hins.hinsoj.judge.codesandbox.CodeSandboxFactory;
 import com.hins.hinsoj.judge.codesandbox.CodeSandboxProxy;
 import com.hins.hinsoj.judge.codesandbox.model.ExecuteCodeRequest;
 import com.hins.hinsoj.judge.codesandbox.model.ExecuteCodeResponse;
+import com.hins.hinsoj.judge.strategy.JudgeContext;
 import com.hins.hinsoj.model.dto.question.JudgeCase;
-import com.hins.hinsoj.model.dto.question.JudgeConfig;
 import com.hins.hinsoj.model.dto.questionsubmit.JudgeInfo;
 import com.hins.hinsoj.model.entity.Question;
 import com.hins.hinsoj.model.entity.QuestionSubmit;
-import com.hins.hinsoj.model.enums.JudgeInfoMessageEnum;
 import com.hins.hinsoj.model.enums.QuestionSubmitStatusEnum;
-import com.hins.hinsoj.model.vo.QuestionSubmitVO;
 import com.hins.hinsoj.service.QuestionService;
 import com.hins.hinsoj.service.QuestionSubmitService;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,11 +33,14 @@ public class JudgeServiceImpl implements JudgeService {
     @Resource
     private QuestionSubmitService questionSubmitService;
 
+    @Resource
+    private JudgeManager judgeManager;
+
     @Value("${codesandbox.type:example}")
     private String type;
 
     @Override
-    public QuestionSubmitVO doJudge(long questionSubmitId) {
+    public QuestionSubmit doJudge(long questionSubmitId) {
         //1.传入题目的提交id，获取到对应的题目、提交信息（包含代码、编程语言等）
         QuestionSubmit questionSubmit = questionSubmitService.getById(questionSubmitId);
         if(questionSubmit == null){
@@ -80,39 +81,27 @@ public class JudgeServiceImpl implements JudgeService {
         ExecuteCodeResponse executeCodeResponse = codeSandbox.executeCode(executeCodeRequest);
         List<String> outputList = executeCodeResponse.getOutputList();
         //5.根据沙箱的执行结果，设置题目的判题状态和信息
-        JudgeInfoMessageEnum judgeInfoMessageEnum = JudgeInfoMessageEnum.WAITING;
-        //判断结果输出数量和预取输出数量是否相等
-        if(outputList.size() != inputList.size()){
-            judgeInfoMessageEnum = JudgeInfoMessageEnum.WRONG_ANSWER;
-            return null;
-        }
-        //依次判断每一项输出和输入是否相等
-        for (int i = 0; i < judgeCaseList.size(); i++) {
-            JudgeCase judgeCase = judgeCaseList.get(i);
-            if(!judgeCase.getOutput().equals(outputList.get(i))){
-                judgeInfoMessageEnum = JudgeInfoMessageEnum.WRONG_ANSWER;
-                return null;
-            }
-        }
-        // 判断题目限制
-        JudgeInfo judgeInfo = executeCodeResponse.getJudgeInfo();
-        Long memory = judgeInfo.getMemory();
-        Long time = judgeInfo.getTime();
-        String judgeConfigStr = question.getJudgeConfig();
-        JudgeConfig judgeConfig = JSONUtil.toBean(judgeConfigStr, JudgeConfig.class);
-        Long needmemoryLimit = judgeConfig.getMemoryLimit();
-        Long needtimeLimit = judgeConfig.getTimeLimit();
+        JudgeContext judgeContext = new JudgeContext();
+        judgeContext.setJudgeInfo(executeCodeResponse.getJudgeInfo());
+        judgeContext.setInputList(inputList);
+        judgeContext.setOutputList(outputList);
+        judgeContext.setJudgeCaseList(judgeCaseList);
+        judgeContext.setQuestion(question);
+        judgeContext.setQuestionSubmit(questionSubmit);
 
-        if (memory > needmemoryLimit){
-            judgeInfoMessageEnum = JudgeInfoMessageEnum.MEMORY_LIMIT_EXCEEDED;
-            return null;
-        }
-        if (time > needtimeLimit){
-            judgeInfoMessageEnum = JudgeInfoMessageEnum.TIME_LIMIT_EXCEEDED;
-            return null;
-        }
+        JudgeInfo judgeInfo = judgeManager.doJudge(judgeContext);
 
+        //6.修改数据库中的判题结果
+        questionSubmitUpdate = new QuestionSubmit();
+        questionSubmitUpdate.setId(questionSubmitId);
+        questionSubmitUpdate.setStatus(QuestionSubmitStatusEnum.SUCCESS.getValue());
+        questionSubmitUpdate.setJudgeInfo(JSONUtil.toJsonStr(judgeInfo));
+        update = questionSubmitService.updateById(questionSubmitUpdate);
+        if(!update){
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "题目状态更新错误");
+        }
+        QuestionSubmit questionSubmitResult = questionSubmitService.getById(questionId);
+        return questionSubmitResult;
 
-        return null;
     }
 }

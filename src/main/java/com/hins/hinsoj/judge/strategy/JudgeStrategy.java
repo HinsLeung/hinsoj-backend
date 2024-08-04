@@ -1,6 +1,6 @@
 package com.hins.hinsoj.judge.strategy;
 
-import com.hins.hinsoj.model.dto.questionsubmit.JudgeInfo;
+import com.hins.hinsoj.judge.codesandbox.model.JudgeInfo;
 
 /**
  * 判题策略

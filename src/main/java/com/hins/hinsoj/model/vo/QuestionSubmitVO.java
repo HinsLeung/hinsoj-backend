@@ -1,7 +1,7 @@
 package com.hins.hinsoj.model.vo;
 
 import cn.hutool.json.JSONUtil;
-import com.hins.hinsoj.model.dto.questionsubmit.JudgeInfo;
+import com.hins.hinsoj.judge.codesandbox.model.JudgeInfo;
 import com.hins.hinsoj.model.entity.QuestionSubmit;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;

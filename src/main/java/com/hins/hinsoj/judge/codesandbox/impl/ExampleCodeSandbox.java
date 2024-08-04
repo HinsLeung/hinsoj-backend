@@ -3,7 +3,7 @@ package com.hins.hinsoj.judge.codesandbox.impl;
 import com.hins.hinsoj.judge.codesandbox.CodeSandbox;
 import com.hins.hinsoj.judge.codesandbox.model.ExecuteCodeRequest;
 import com.hins.hinsoj.judge.codesandbox.model.ExecuteCodeResponse;
-import com.hins.hinsoj.model.dto.questionsubmit.JudgeInfo;
+import com.hins.hinsoj.judge.codesandbox.model.JudgeInfo;
 import com.hins.hinsoj.model.enums.JudgeInfoMessageEnum;
 import com.hins.hinsoj.model.enums.QuestionSubmitStatusEnum;
 import lombok.extern.slf4j.Slf4j;

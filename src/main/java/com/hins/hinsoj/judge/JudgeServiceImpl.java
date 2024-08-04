@@ -10,7 +10,7 @@ import com.hins.hinsoj.judge.codesandbox.model.ExecuteCodeRequest;
 import com.hins.hinsoj.judge.codesandbox.model.ExecuteCodeResponse;
 import com.hins.hinsoj.judge.strategy.JudgeContext;
 import com.hins.hinsoj.model.dto.question.JudgeCase;
-import com.hins.hinsoj.model.dto.questionsubmit.JudgeInfo;
+import com.hins.hinsoj.judge.codesandbox.model.JudgeInfo;
 import com.hins.hinsoj.model.entity.Question;
 import com.hins.hinsoj.model.entity.QuestionSubmit;
 import com.hins.hinsoj.model.enums.QuestionSubmitStatusEnum;

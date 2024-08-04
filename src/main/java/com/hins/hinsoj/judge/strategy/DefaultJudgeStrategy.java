@@ -3,7 +3,7 @@ package com.hins.hinsoj.judge.strategy;
 import cn.hutool.json.JSONUtil;
 import com.hins.hinsoj.model.dto.question.JudgeCase;
 import com.hins.hinsoj.model.dto.question.JudgeConfig;
-import com.hins.hinsoj.model.dto.questionsubmit.JudgeInfo;
+import com.hins.hinsoj.judge.codesandbox.model.JudgeInfo;
 import com.hins.hinsoj.model.entity.Question;
 import com.hins.hinsoj.model.enums.JudgeInfoMessageEnum;
 

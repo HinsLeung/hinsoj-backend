@@ -1,6 +1,5 @@
 package com.hins.hinsoj.judge.codesandbox.model;
 
-import com.hins.hinsoj.model.dto.questionsubmit.JudgeInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

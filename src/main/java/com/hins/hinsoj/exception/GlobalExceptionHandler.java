@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 全局异常处理器
  *
@@ -18,7 +20,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
-    public BaseResponse<?> businessExceptionHandler(BusinessException e) {
+    public BaseResponse<?> businessExceptionHandler(BusinessException e, HttpServletRequest request) {
+
         log.error("BusinessException", e);
         return ResultUtils.error(e.getCode(), e.getMessage());
     }

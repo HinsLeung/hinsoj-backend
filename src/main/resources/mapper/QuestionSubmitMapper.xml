@@ -12,6 +12,7 @@
             <result property="status" column="status" jdbcType="INTEGER"/>
             <result property="questionId" column="questionId" jdbcType="BIGINT"/>
             <result property="userId" column="userId" jdbcType="BIGINT"/>
+            <result property="questionTitle" column="questionTitle" jdbcType="VARCHAR"/>
             <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
             <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
@@ -19,7 +20,7 @@
 
     <sql id="Base_Column_List">
         id,language,code,
-        judgeInfo,status,questionId,
+        judgeInfo,status,questionId,questionTitle,
         userId,createTime,updateTime,
         isDelete
     </sql>

@@ -11,7 +11,7 @@ import javax.annotation.Resource;
  * 题目提交接口
  *
  * @author HinsLeung
- * @from 
+ * @from <a href="https://github.com/HinsLeung/hinsoj-backend"> HinsLeungOJ后端代码 </a>
  */
 @RestController
 //@RequestMapping("/question_submit")

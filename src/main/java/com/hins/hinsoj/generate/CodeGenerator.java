@@ -15,8 +15,8 @@ import java.io.Writer;
 /**
  * 代码生成器
  *
- * @author <a href="https://github.com/lihins">程序员鱼皮</a>
- * @from <a href="https://www.code-nav.cn">编程导航学习圈</a>
+ * @author HinsLeung
+ * @from <a href="https://github.com/HinsLeung/hinsoj-backend"> HinsLeungOJ后端代码 </a>
  */
 public class CodeGenerator {
 

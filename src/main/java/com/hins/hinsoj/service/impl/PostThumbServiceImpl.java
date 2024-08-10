@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
  * 帖子点赞服务实现
  *
  * @author HinsLeung
- * @from
+ * @from <a href="https://github.com/HinsLeung/hinsoj-backend"> HinsLeungOJ后端代码 </a>
  */
 @Service
 public class PostThumbServiceImpl extends ServiceImpl<PostThumbMapper, PostThumb>

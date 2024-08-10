@@ -11,8 +11,8 @@ import lombok.Data;
 /**
  * 帖子收藏
  *
- * @author <a href="https://github.com/lihins">程序员鱼皮</a>
- * @from <a href="https://hins.icu">编程导航知识星球</a>
+ * @author HinsLeung
+ * @from <a href="https://github.com/HinsLeung/hinsoj-backend"> HinsLeungOJ后端代码 </a> 
  **/
 @TableName(value = "post_favour")
 @Data

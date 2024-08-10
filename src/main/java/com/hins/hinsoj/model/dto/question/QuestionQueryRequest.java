@@ -15,7 +15,7 @@ import java.util.List;
  * 查询请求
  *
  * @author HinsLeung
- * @from
+ * @from <a href="https://github.com/HinsLeung/hinsoj-backend"> HinsLeungOJ后端代码 </a>
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

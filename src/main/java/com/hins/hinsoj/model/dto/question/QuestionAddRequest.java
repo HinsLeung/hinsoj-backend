@@ -9,7 +9,7 @@ import java.util.List;
  * 创建请求
  *
  * @author HinsLeung
- * @from
+ * @from <a href="https://github.com/HinsLeung/hinsoj-backend"> HinsLeungOJ后端代码 </a>
  */
 @Data
 public class QuestionAddRequest implements Serializable {

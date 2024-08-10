@@ -1,9 +1,9 @@
 package com.hins.hinsoj.judge.strategy;
 
 import cn.hutool.json.JSONUtil;
+import com.hins.hinsoj.judge.codesandbox.model.JudgeInfo;
 import com.hins.hinsoj.model.dto.question.JudgeCase;
 import com.hins.hinsoj.model.dto.question.JudgeConfig;
-import com.hins.hinsoj.judge.codesandbox.model.JudgeInfo;
 import com.hins.hinsoj.model.entity.Question;
 import com.hins.hinsoj.model.enums.JudgeInfoMessageEnum;
 
@@ -25,6 +25,17 @@ public class JavaLanguageJudgeStrategy implements JudgeStrategy {
         Long time = Optional.ofNullable(judgeInfo.getTime()).orElse(0L);
         List<String> inputList = judgeContext.getInputList();
         List<String> outputList = judgeContext.getOutputList();
+
+//        inputList = inputList.stream().map(String::trim).collect(Collectors.toList());
+
+        for (int i = 0; i < outputList.size(); i++) {
+            String line = outputList.get(i);
+            if (line != null && !line.isEmpty() && line.endsWith("\n")) {
+                outputList.set(i, line.substring(0, line.length() - 1));
+            }
+        }
+
+
         Question question = judgeContext.getQuestion();
         List<JudgeCase> judgeCaseList = judgeContext.getJudgeCaseList();
         JudgeInfoMessageEnum judgeInfoMessageEnum = JudgeInfoMessageEnum.ACCEPTED;
@@ -55,7 +66,7 @@ public class JavaLanguageJudgeStrategy implements JudgeStrategy {
         Long needmemoryLimit = judgeConfig.getMemoryLimit();
         Long needtimeLimit = judgeConfig.getTimeLimit();
 
-        if (memory > needmemoryLimit){
+        if (memory/1024/1024 > needmemoryLimit){
             judgeInfoMessageEnum = JudgeInfoMessageEnum.MEMORY_LIMIT_EXCEEDED;
             judgeInfoResponse.setMessage(judgeInfoMessageEnum.getValue());
             return judgeInfoResponse;

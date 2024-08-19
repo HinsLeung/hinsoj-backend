@@ -56,6 +56,7 @@ create table if not exists question_submit
     judgeInfo  text                               not null comment '判题信息（json对象）',
     status     int      default 0                 not null comment '判题状态（0-待判题、1-判题中、2-成功、3-失败）',
     questionId bigint                             not null comment '题目 id',
+    questionTitle varchar(128)                       not null comment '题目标题',
     userId     bigint                             not null comment '创建用户 id',
     createTime datetime default CURRENT_TIMESTAMP not null comment '创建时间',
     updateTime datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
